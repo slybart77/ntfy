@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import logging
 
 import requests
+import json
 
 
 def notify(title, message, retcode=None, webhook=None):
@@ -16,9 +17,9 @@ def notify(title, message, retcode=None, webhook=None):
                      'teams backend of the config file')
         return
     headers = { 'Content-Type': 'application/json' }
-    data = "{{'text': '{title}\n{message}'}}".format(title=title, message=message)
+    data = { "title": message, "text": title }
     response = requests.post(
         webhook,
         headers=headers,
-        data=data.encode('utf-8'))
+        data=json.dumps(data))
     response.raise_for_status()
